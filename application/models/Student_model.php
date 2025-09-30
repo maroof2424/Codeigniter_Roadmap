@@ -5,11 +5,14 @@ class Student_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-        $this->load->database();   // extra safety
+        $this->load->database();  // database load
     }
 
     public function get_students() {
-        $query = $this->db->get('students');
-        return $query->result_array();
+        return $this->db->get('students')->result_array();
+    }
+
+    public function insert_student($data) {
+        return $this->db->insert('students', $data);
     }
 }
