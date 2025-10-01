@@ -1,37 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Student</title>
+    <title>Student Form</title>
 </head>
 <body>
-    <h2>Add New Student</h2>
+    <h1><?php echo isset($student) ? "Edit Student" : "Add Student"; ?></h1>
 
-    <?php echo form_open('students/save'); ?>
+    <?php echo form_open(); ?>
+        <label>Name:</label><br>
+        <input type="text" name="name" value="<?php echo isset($student) ? $student['name'] : ''; ?>"><br><br>
 
-    <p>
-        <?php echo form_label('Name:', 'name'); ?>
-        <?php echo form_input('name', '', 'required'); ?>
-    </p>
+        <label>Age:</label><br>
+        <input type="number" name="age" value="<?php echo isset($student) ? $student['age'] : ''; ?>"><br><br>
 
-    <p>
-        <?php echo form_label('Age:', 'age'); ?>
-        <?php echo form_input('age', '', 'required'); ?>
-    </p>
+        <label>Course:</label><br>
+        <input type="text" name="course" value="<?php echo isset($student) ? $student['course'] : ''; ?>"><br><br>
 
-    <p>
-        <?php echo form_label('Course:', 'course'); ?>
-        <?php echo form_input('course', '', 'required'); ?>
-    </p>
+        <label>Bio:</label><br>
+        <textarea name="bio"><?php echo isset($student) ? $student['bio'] : ''; ?></textarea><br><br>
 
-    <p>
-        <?php echo form_label('Bio:', 'bio'); ?>
-        <?php echo form_textarea('bio'); ?>
-    </p>
-
-    <p>
-        <?php echo form_submit('submit', 'Save Student'); ?>
-    </p>
-
+        <button type="submit">Save</button>
     <?php echo form_close(); ?>
+
+    <a href="<?php echo site_url('students'); ?>">Back to List</a>
 </body>
 </html>

@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Students List</title>
+    <title>Students</title>
 </head>
 <body>
-    <h2>All Students</h2>
-
-    <a href="<?php echo site_url('students/add'); ?>">+ Add New Student</a>
-    <br><br>
-
-    <table border="1" cellpadding="5">
+    <h1>All Students</h1>
+    <a href="<?php echo site_url('students/create'); ?>">+ Add New Student</a>
+    <table border="1" cellpadding="5" cellspacing="0">
         <tr>
-            <th>ID</th><th>Name</th><th>Age</th><th>Course</th><th>Bio</th>
+            <th>ID</th><th>Name</th><th>Age</th><th>Course</th><th>Bio</th><th>Actions</th>
         </tr>
-        <?php foreach ($students as $s): ?>
+        <?php foreach($students as $s): ?>
         <tr>
-            <td><?php echo isset($s['name']) ? $s['name'] : 'N/A'; ?></td>
-<td><?php echo isset($s['age']) ? $s['age'] : 'N/A'; ?></td>
-<td><?php echo isset($s['course']) ? $s['course'] : 'N/A'; ?></td>
-<td><?php echo !empty($s['bio']) ? word_limiter($s['bio'], 5) : 'No Bio'; ?></td>
-
+            <td><?php echo $s['id']; ?></td>
+            <td><?php echo $s['name']; ?></td>
+            <td><?php echo $s['age']; ?></td>
+            <td><?php echo $s['course']; ?></td>
+            <td><?php echo !empty($s['bio']) ? word_limiter($s['bio'], 5) : 'No Bio'; ?></td>
+            <td>
+                <a href="<?php echo site_url('students/edit/'.$s['id']); ?>">Edit</a> | 
+                <a href="<?php echo site_url('students/delete/'.$s['id']); ?>">Delete</a>
+            </td>
         </tr>
         <?php endforeach; ?>
     </table>
