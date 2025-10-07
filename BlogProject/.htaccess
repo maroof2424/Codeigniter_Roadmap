@@ -1,7 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /bcit-ci-CodeIgniter-3.1.13-0-gbcb17eb/Codeigniter_Roadmap/BlogProject/
-
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php/$1 [L]
