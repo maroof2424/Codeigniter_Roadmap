@@ -1,6 +1,4 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Blog extends CI_Controller {
 
     public function __construct() {
@@ -10,49 +8,60 @@ class Blog extends CI_Controller {
         $this->load->library('session');
     }
 
-    // -------------------------------------
-    // 📰 INDEX - Show all posts
-    // -------------------------------------
     public function index() {
-        $data['posts'] = $this->Blog_model->get_all_posts();
-
+        $data['posts'] = $this->Blog_model->get_posts();
         $this->load->view('templates/header');
         $this->load->view('blog/index', $data);
         $this->load->view('templates/footer');
     }
 
-    // -------------------------------------
-    // ✍️ CREATE - Add new post
-    // -------------------------------------
     public function create() {
-        // Restrict access if not logged in
-        if(!$this->session->userdata('logged_in')) {
-            redirect('auth/login');
-        }
-
-        // If form submitted
-        if($this->input->method() === 'post') {
-            $title = $this->input->post('title');
-            $slug = url_title($title, 'dash', TRUE);
+        if ($this->input->post()) {
+            $slug = url_title($this->input->post('title'), 'dash', TRUE);
             $data = [
-                'title' => $title,
+                'title' => $this->input->post('title'),
                 'slug' => $slug,
                 'content' => $this->input->post('content'),
-                'author_id' => $this->session->userdata('user_id'),
+                'author_id' => 1,
                 'status' => 'published'
             ];
-
-            if ($this->Blog_model->create_post($data)) {
-                $this->session->set_flashdata('success', 'Post created successfully ✅');
-                redirect('blog');
-            } else {
-                $this->session->set_flashdata('error', 'Failed to create post ❌');
-            }
+            $this->Blog_model->insert_post($data);
+            $this->session->set_flashdata('msg', 'Post created successfully!');
+            redirect('blog');
         }
-
-        // Show form
         $this->load->view('templates/header');
         $this->load->view('blog/create');
         $this->load->view('templates/footer');
+    }
+
+    // ✅ Edit Post
+    public function edit($id) {
+        $data['post'] = $this->Blog_model->get_post($id);
+
+        if (empty($data['post'])) {
+            show_404();
+        }
+
+        if ($this->input->post()) {
+            $updateData = [
+                'title' => $this->input->post('title'),
+                'content' => $this->input->post('content'),
+                'status' => $this->input->post('status')
+            ];
+            $this->Blog_model->update_post($id, $updateData);
+            $this->session->set_flashdata('msg', 'Post updated successfully!');
+            redirect('blog');
+        }
+
+        $this->load->view('templates/header');
+        $this->load->view('blog/edit', $data);
+        $this->load->view('templates/footer');
+    }
+
+    // ✅ Delete Post
+    public function delete($id) {
+        $this->Blog_model->delete_post($id);
+        $this->session->set_flashdata('msg', 'Post deleted successfully!');
+        redirect('blog');
     }
 }
